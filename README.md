@@ -15,6 +15,8 @@
 ### Demo
 ##### As a command line application (CLI)
 
+![cli_demo](https://cloud.githubusercontent.com/assets/10980285/16903220/75f5e1d4-4c95-11e6-87b4-92a1b49605a5.gif)  
+
 ##### As a module
 ![ezgif com-video-to-gif](https://cloud.githubusercontent.com/assets/10980285/16902720/b3dcdcb6-4c84-11e6-836f-f5af79642763.gif)  
 
