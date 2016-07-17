@@ -20,11 +20,12 @@ class Utilities(object):
     """ 
     Parent class that contains
     utility functions like
-    get_pdf() , validate ..etc
+    get_pdf() , validate() ..etc
 
     """
-    def __init__(self,site,html,out='out.pdf'):
+    def __init__(self,site,html,dr,out='out.pdf'):
         self.page_as_string = html
+        self.dr = dr
         self.out = out
         self.site = site
 
@@ -41,14 +42,16 @@ class Utilities(object):
 
         print "Generating PDF..."
 
+        # Check if there are images
         if soup.find('img') is not None:
             tmp_exists=1
             imgs = soup.find_all('img')
             cwd = os.getcwd()
-            dir_name = md5('competitive-dl').hexdigest()
+            dir_name = md5('competitive-dl').hexdigest() #Create a temporary folder
             done =0
             count=1
             
+            # Fix folder name
             while done==0:
                 if dir_name not in os.listdir('.'):
                     done=1
@@ -66,7 +69,7 @@ class Utilities(object):
                 if img['src'][0] == '/':
                     img['src'] = 'http://'+self.site+'.com'+img['src']
 
-                urlretrieve(img['src'],file)
+                urlretrieve(img['src'],file) # Retrieve image
                 img['src']=cwd+'/'+file
                 del img['class']
                 del img['style']
@@ -74,9 +77,15 @@ class Utilities(object):
                 count = count+1
 
         curr_html = str(soup).decode('utf8')
+        if self.dr[len(self.dr)-1]!='/':
+            self.dr+='/'
+        out_file = self.dr + self.out
 
-        pdfkit.from_string(curr_html , self.out) # Convert to PDF !!
+        pdfkit.from_string(curr_html , out_file) # Convert to PDF !!
 
+        print "Done ! Check out "+out_file+' !'
+
+        # Remove temporary directory
         if tmp_exists:
             for k in os.listdir(dir_name):
                 os.remove(dir_name+'/'+k)
@@ -84,6 +93,11 @@ class Utilities(object):
 
     @staticmethod
     def validate_site(site,available,upcoming):
+        """ 
+        Method to check if 
+        the given site is valid
+
+        """
 
         if site not in available and site not in upcoming:
             print "Competitive-dl can\'t understand " + site
@@ -118,7 +132,7 @@ class Utilities(object):
         else:
             source = ''
             virtual_display = Xvfb()
-            virtual_display.start()
+            virtual_display.start() # Start virtual display
             browser = webdriver.Firefox()
             print "Finding the given page...."
             browser.get(url)
@@ -136,9 +150,9 @@ class StaticScraper(Utilities):
     content isn't injected dynamically using javascript
     
     """
-    def __init__(self, site , contest , problem , out='out.pdf' , **others):
+    def __init__(self, site , contest , problem , dr='.' , out='out.pdf' , **others):
         
-        self.site = site
+        self.site = str.lower(site)
         self.contest = contest
         self.problem = problem
         self.others = others
@@ -147,6 +161,7 @@ class StaticScraper(Utilities):
         self.page_as_string = ''
         self.problem_container = None
         self.problem_container_as_string = ''
+        self.dr = dr 
         self.out = out
         self.available = ['spoj','codeforces'] # All sites that competitive-dl can scrape
         self.upcoming = ['topcoder'] # Sites for which scraping functionality isn't provided
@@ -220,6 +235,9 @@ class StaticScraper(Utilities):
                 url = url + '?locale=en'
 
             self.url = url
+
+            print "Pinging up codeforces...."
+
             # Get page source
             self.page_as_string = Utilities.get_html(url)
             soup = bs(self.page_as_string)
@@ -271,6 +289,8 @@ class StaticScraper(Utilities):
             self.problem = str.upper(self.problem)
             url = url+"/problems/"+self.problem+'/'
             
+            print "Pinging up spoj...."
+            
             self.page_as_string = Utilities.get_html(url)
             soup = bs(self.page_as_string)
             
@@ -298,7 +318,7 @@ class DynamicScraper(Utilities):
     javascript
 
     """
-    def __init__(self,site,contest,problem,out='out.pdf',**others):
+    def __init__(self,site,contest,problem,dr='.',out='out.pdf',**others):
         if not dynamic_dependencies:
             print "The extra depencies to scrape aren't"\
             " installed\n Please make sure you install them\n"\
@@ -307,12 +327,15 @@ class DynamicScraper(Utilities):
             sys.exit(0)
 
         else:
-            self.site = site
+            self.site = str.lower(site)
             self.contest = contest
             self.problem = problem
             self.page_as_soup = None
             self.page_as_string = ''
+            self.problem_container = None
+            self.problem_container_as_string=''
             self.others = others
+            self.dr = dr
             self.out = out
             self.available = ['codechef']
             self.upcoming = ['codejam']
@@ -342,6 +365,8 @@ class DynamicScraper(Utilities):
             soup = bs(self.page_as_string)
             self.page_as_soup = soup
 
+            # Scrape contents
+            
             maintable = soup.find('table',{'id':'maintable'})
             if maintable is not None:
                 maintable.extract()
@@ -386,6 +411,8 @@ class DynamicScraper(Utilities):
             if footer is not None:
                 footer.extract()
 
+            self.problem_container = soup.find('div',{'id':'problem-left'})
+            self.problem_container_as_string = str(self.problem_container)
             self.page_as_soup = soup
             self.page_as_string = str(self.page_as_soup)
 
