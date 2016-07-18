@@ -64,7 +64,7 @@ From this repository
 
 .. code:: sh
 
-	python setup.py 
+	python setup.py install  
 
 
 Usage 

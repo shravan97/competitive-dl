@@ -52,7 +52,7 @@ cd competitive-dl
 ```  
 
 ```sh
-python setup.py 
+python setup.py install  
 
 ```  
 
