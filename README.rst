@@ -1,11 +1,11 @@
-Competitive - dl 
+Competitive - dl  :file_folder:
 ---------------- 
 
 **Note :** This tool is to be used for **educational** pursoses **only** and not for any other commercial use
 
 Features 
 ~~~~~~~~ 
-- Download any problem/problem set from any contest/archives from any competitive website as PDF !
+- Download any problem/problem set from any contest/archives from any competitive website as PDF for offline practice !
 	* You can download to any desired directory of your choice !
 - Get the HTML source of the problem page as well as the problem container
 - Get the problem statement , input & output samples as text  
@@ -65,6 +65,10 @@ From this repository
 .. code:: sh
 
 	python setup.py install  
+
+Using pip 
+''''''''' 
+Coming up very soon !  
 
 
 Usage 
