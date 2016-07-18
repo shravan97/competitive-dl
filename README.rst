@@ -68,8 +68,10 @@ From this repository
 
 Using pip 
 ''''''''' 
-Coming up very soon !  
-
+.. code:: sh
+	
+	pip install competitive-dl  
+	
 
 Usage 
 ~~~~~ 

@@ -56,7 +56,12 @@ python setup.py install
 
 ```  
 ##### Using pip
-Coming up very soon !  
+
+```python
+
+pip install competitive-dl
+
+```  
 
 
 ### Usage
