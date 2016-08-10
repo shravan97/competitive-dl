@@ -1,45 +1,46 @@
-from util import Utilities as Ut , StaticScraper as Ssc , DynamicScraper as Dsc
+from util import Utilities as Ut, StaticScraper as Ssc, DynamicScraper as Dsc
 from argparse import ArgumentParser as Ap
 import sys
 
+
 def get_options():
     parser = Ap()
-    
+
     parser.add_argument('-s',
-    dest="site",
-    help="The competitive"\
-    " site , for eg. "
-    "codeforces , spoj ...etc")
+                        dest="site",
+                        help="The competitive"
+                        " site , for eg. "
+                        "codeforces , spoj ...etc")
     parser.add_argument('-c',
-    dest='contest',
-    help='Contest-id or archive , for '\
-    'eg. 682 , classical..etc ')
+                        dest='contest',
+                        help='Contest-id or archive , for '
+                        'eg. 682 , classical..etc ')
     parser.add_argument('-p',
-    dest="problem",
-    help='Problem code ,'\
-    ' for eg. COINS , A , 1...etc')
+                        dest="problem",
+                        help='Problem code ,'
+                        ' for eg. COINS , A , 1...etc')
     parser.add_argument('-d',
-    dest="dir",
-    help="Directory where"\
-    " your file has to be"\
-    " saved")
+                        dest="dir",
+                        help="Directory where"
+                        " your file has to be"
+                        " saved")
     parser.add_argument('-o',
-    dest="filename",
-    help="PDF file name")
+                        dest="filename",
+                        help="PDF file name")
     parser.add_argument('-l',
-    dest="language",
-    help="Language in which "\
-    "content has to be saved . "\
-    "This depends on the languages"\
-    " offered by the competitive site")
+                        dest="language",
+                        help="Language in which "
+                        "content has to be saved . "
+                        "This depends on the languages"
+                        " offered by the competitive site")
 
     args = parser.parse_args()
 
     values = {}
     if args.site is None:
         print "Please specify"\
-        " the competitive website\n"\
-        "For eg. codeforces , codechef...etc"
+            " the competitive website\n"\
+            "For eg. codeforces , codechef...etc"
         sys.exit(0)
     else:
         values['site'] = args.site
@@ -52,13 +53,13 @@ def get_options():
         else:
             if args.site != 'codeforces':
                 print "Competitive-dl "\
-                "doesn't yet support "\
-                "problem set downloads "\
-                "from contests of sites "\
-                "other than codeforces"
+                    "doesn't yet support "\
+                    "problem set downloads "\
+                    "from contests of sites "\
+                    "other than codeforces"
                 sys.exit(0)
             else:
-                values['problem']='all'
+                values['problem'] = 'all'
         if args.dir is not None:
             values['dr'] = args.dir
         if args.filename is not None:
@@ -67,6 +68,7 @@ def get_options():
             values['lang'] = 'en'
 
         return values
+
 
 def mains():
     args = get_options()
@@ -83,5 +85,5 @@ def mains():
 
     scraper_obj.get_pdf()
 
-if __name__=="__main__":
+if __name__ == "__main__":
     mains()
