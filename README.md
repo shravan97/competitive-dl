@@ -84,7 +84,7 @@ optional arguments:
 
 ```python
 from competitiveDl import util
-c = util.StaticScraper('spoj','classical','PALIN',dr='/home/shravan97/Desktop/',out='favourite.gif')
+c = util.StaticScraper('spoj','classical','PALIN',dr='/home/shravan97/Desktop/',out='favourite.pdf')
 c.get_pdf()
 
 ```
